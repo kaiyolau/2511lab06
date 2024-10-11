@@ -1,5 +1,3 @@
-package ca.bcit.comp2522.lab5;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.List;
  * @author Gem Baojimin Sha
  * @version 1.0
  */
-public class BookStore
+public class BookStore <T extends Literature>
 {
     private static final int  MIN_YEAR = 0;
     private static final int  MAX_YEAR = 9999;
@@ -30,14 +28,24 @@ public class BookStore
     private static final int  DECADE_DIVIDER_TEN = 10;
     private static final int  DECADE_ADDITION_NINE = 9;
 
+
+    private List<T> items = new ArrayList<>();
+
+    public void addItem(final T item) { items.add(item); }
+
+    public void printItems() {
+        for (final T item : items) {
+            System.out.println(item.getTitle());
+        }
+    }
+
     /**
      * Constructs a new BookStore with the specified name and list of novels.
      *
      * @param bookStoreName The name of the bookstore.
-     * @param novels        The list of novels to be added to the bookstore.
      */
     BookStore(final String bookStoreName,
-              final List<Novel> novels)
+              final List<T> novels)
     {
         this.bookStoreName = bookStoreName;
         this.novelList = new ArrayList<>();
@@ -526,7 +534,14 @@ public class BookStore
         String getBooksThisLength;
 
         // Create a list of novels to be used in the bookstore
-        List<Novel> novelList = new ArrayList<>();
+        List<Literature> novelList = new ArrayList<>();
+
+        BookStore<Literature> store = new BookStore<>("Pet Crossing", novelList);
+        store.addItem(new Novel("War and Peace", "John Heleon", 1968));
+        store.addItem(new ComicBook("Spider-Man"));
+        store.addItem(new Magazine("National Geographic"));
+        store.printItems(); // Should print titles from different item types
+
 
         // Create the bookstore object with the list of novels
         BookStore myBookStore = new BookStore("Animal Crossing", novelList);

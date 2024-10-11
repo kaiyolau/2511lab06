@@ -1,5 +1,3 @@
-package ca.bcit.comp2522.lab5;
-
 /**
  * Represents a novel with a title, author name, and year of publication.
  * This class is immutable, meaning its state cannot be changed after creation.
@@ -10,7 +8,7 @@ package ca.bcit.comp2522.lab5;
  * @author Gem Baojimin Sha
  * @version 1.0
  */
-public class Novel
+public class Novel extends Literature
 {
 
     private final String title;
