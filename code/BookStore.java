@@ -29,15 +29,31 @@ public class BookStore <T extends Literature>
     private static final int  DECADE_ADDITION_NINE = 9;
 
 
+    /**
+     * A list of items of type T, where T must extend the Literature class.
+     * This list holds the literature items that are added to the bookstore.
+     */
     private List<T> items = new ArrayList<>();
 
-    public void addItem(final T item) { items.add(item); }
+    /**
+     * Adds a new item to the bookstore's list of items.
+     *
+     * @param item The item to be added to the bookstore. It must be of type T, which extends Literature.
+     */
+    public void addItem(final T item) {
+        items.add(item);
+    }
 
+    /**
+     * Prints the titles of all items stored in the bookstore's list.
+     * Each item must implement a getTitle() method, which is inherited from the Literature class.
+     */
     public void printItems() {
         for (final T item : items) {
             System.out.println(item.getTitle());
         }
     }
+
 
     /**
      * Constructs a new BookStore with the specified name and list of novels.
@@ -48,7 +64,7 @@ public class BookStore <T extends Literature>
               final List<T> novels)
     {
         this.bookStoreName = bookStoreName;
-        this.novelList = new ArrayList<>();
+        this.novelList     = new ArrayList<>();
 
         novelList.add(new Novel("The Adventures of Augie March", "Saul Bellow", 1953));
         novelList.add(new Novel("All the King's Men", "Robert Penn Warren", 1946));
@@ -536,6 +552,7 @@ public class BookStore <T extends Literature>
         // Create a list of novels to be used in the bookstore
         List<Literature> novelList = new ArrayList<>();
 
+        // Create the bookstore object with the list of novels
         BookStore<Literature> store = new BookStore<>("Pet Crossing", novelList);
         store.addItem(new Novel("War and Peace", "John Heleon", 1968));
         store.addItem(new ComicBook("Spider-Man"));
