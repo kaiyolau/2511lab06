@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class BookStore <T extends Literature>
 {
+
     private static final int  MIN_YEAR = 0;
     private static final int  MAX_YEAR = 9999;
     private static final int  MIN_TITLE_Length = 0;
@@ -168,6 +169,64 @@ public class BookStore <T extends Literature>
         novelList.add(new Novel("Wide Sargasso Sea", "Jean Rhys", 1966));
     }
 
+    static class BookStoreInfo {
+        public void displayInfo(String storeName, int itemCount) {
+            System.out.println("BookStore: " + storeName + ", Items: " + itemCount);
+        }
+    }
+
+    class NovelStatistics {
+        public double averageTitleLength() {
+            if (items.isEmpty()){
+                return 0.0; 
+            } 
+                
+            int totalLength = 0;
+            for (T item : items) {
+                totalLength += item.getTitle().length();
+            }
+            return (double) totalLength / items.size();
+        }
+
+        public int mostCommonPublicationYear() {
+            if (items.isEmpty()){
+                return 0.0; 
+            } 
+                
+            int mostCommonYear;
+            int maxCount;
+
+            mostCommonYear = 0;
+            maxCount = 0;
+
+            List<Integer> years = new ArrayList<>();
+                
+            for (T item : items) {
+                int year; 
+                year = item.getPublicationYear();
+                years.add(year);
+            }
+    
+            for (int year : years) {
+                int count; 
+                count = 0;
+                
+                for (int otherYear : years) {
+                    if (year == otherYear){
+                        count++;
+                    } 
+                }
+
+                if (count > maxCount) {
+                    maxCount = count;
+                    mostCommonYear = year;
+                }
+            }
+    
+            return mostCommonYear;
+        }
+    }
+        
     /**
      * Gets the name of the bookstore.
      *
