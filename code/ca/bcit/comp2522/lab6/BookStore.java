@@ -36,7 +36,7 @@ public class BookStore<T extends Literature>
      * A list of items of type T, where T must extend the Literature class.
      * This list holds the literature items that are added to the bookstore.
      */
-    private List<T> items = new ArrayList<>();
+    private final List<T> items = new ArrayList<>();
 
     /**
      * Adds a new item to the bookstore's list of items.
@@ -66,8 +66,7 @@ public class BookStore<T extends Literature>
      *
      * @param bookStoreName The name of the bookstore.
      */
-    BookStore(final String bookStoreName,
-              final List<T> novels)
+    BookStore(final String bookStoreName)
     {
         this.bookStoreName = bookStoreName;
         this.novelList = new ArrayList<>();
@@ -180,11 +179,11 @@ public class BookStore<T extends Literature>
      * @param novelCollection A List that can contain Novel objects or their superclasses.
      *                        This list will be modified to include all Novel objects from the items collection.
      */
-    public void addNovelsToCollection(List<? super Novel> novelCollection)
+    public void addNovelsToCollection(final List<? super Novel> novelCollection)
     {
         if(items != null && novelCollection != null)
         {
-            for(T item : items)
+            for(final T item : items)
             {
                 if(item instanceof Novel)
                 {
@@ -205,7 +204,8 @@ public class BookStore<T extends Literature>
          * @param storeName The name of the bookstore.
          * @param itemCount The number of items in the bookstore's inventory.
          */
-        public void displayInfo(String storeName, int itemCount)
+        public void displayInfo(final String storeName,
+                                final int itemCount)
         {
             System.out.println("BookStore: " + storeName + ", Items: " + itemCount);
         }
@@ -223,8 +223,9 @@ public class BookStore<T extends Literature>
          */
         public double averageTitleLength()
         {
-            int totalLength = 0;
-            for(T item : items)
+            int totalLength;
+            totalLength = 0;
+            for(final T item : items)
             {
                 totalLength += item.getTitle().length();
             }
@@ -240,29 +241,32 @@ public class BookStore<T extends Literature>
         {
             int mostCommonYear;
             int maxCount;
+            final List<Integer> years;
+
             mostCommonYear = 0;
             maxCount = 0;
-            List<Integer> years = new ArrayList<>();
+            years = new ArrayList<>();
 
-            for(T item : items)
+            for(final T item : items)
             {
                 int year;
                 year = item.getYearPublished();
                 years.add(year);
             }
 
-            for(int year : years)
+            for(final int year : years)
             {
                 int count;
                 count = 0;
 
-                for(int otherYear : years)
+                for(final int otherYear : years)
                 {
                     if(year == otherYear)
                     {
                         count++;
                     }
                 }
+
                 if(count > maxCount)
                 {
                     maxCount = count;
@@ -300,7 +304,7 @@ public class BookStore<T extends Literature>
      */
     public void printAllTitles()
     {
-        for(Novel novel : novelList)
+        for(final Novel novel : novelList)
         {
             System.out.println(novel.getTitle().toUpperCase());
         }
@@ -330,10 +334,11 @@ public class BookStore<T extends Literature>
      */
     public void printTitlesInAlphaOrder()
     {
-        List<String> titles = new ArrayList<>();
+        final List<String> titles;
+        titles = new ArrayList<>();
 
         // Collect titles from the novel list
-        for(Novel novel : novelList)
+        for(final Novel novel : novelList)
         {
             titles.add(novel.getTitle());
         }
@@ -352,9 +357,13 @@ public class BookStore<T extends Literature>
      */
     public void printGroupByDecade(final int decade)
     {
-        int startYear = (decade / DECADE_DIVIDER_TEN) * DECADE_DIVIDER_TEN;
-        int endYear = startYear + DECADE_ADDITION_NINE;
-        for(Novel novel : novelList)
+        int startYear;
+        int endYear;
+
+        startYear = (decade / DECADE_DIVIDER_TEN) * DECADE_DIVIDER_TEN;
+        endYear = startYear + DECADE_ADDITION_NINE;
+
+        for(final Novel novel : novelList)
         {
             if(novel.getYearPublished() >= startYear && novel.getYearPublished() <= endYear)
             {
@@ -375,7 +384,8 @@ public class BookStore<T extends Literature>
         }
 
         Novel longestTitleNovel = novelList.getFirst();
-        for(Novel novel : novelList)
+
+        for(final Novel novel : novelList)
         {
             if(novel.getTitle().length() > longestTitleNovel.getTitle().length())
             {
@@ -401,7 +411,7 @@ public class BookStore<T extends Literature>
     {
         validateYear(year);
 
-        for(Novel novel : novelList)
+        for(final Novel novel : novelList)
         {
             if(novel != null)
             {
@@ -441,7 +451,7 @@ public class BookStore<T extends Literature>
                 final Novel novels;
                 novels = it.next();
 
-                String novelsTitle;
+                final String novelsTitle;
                 novelsTitle = novels.getTitle().toLowerCase();
 
                 if(novelsTitle.contains(word.toLowerCase()))
@@ -546,7 +556,8 @@ public class BookStore<T extends Literature>
             return null;
         }
 
-        List<Novel> sameLengthTitle = new ArrayList<>();
+        final List<Novel> sameLengthTitle;
+        sameLengthTitle = new ArrayList<>();
 
         for(final Novel novel : novelList)
         {
@@ -654,66 +665,50 @@ public class BookStore<T extends Literature>
 
     public static void main(final String[] args)
     {
-        // Variables for testing the methods
         boolean bookWrittenBetween;
         int wordCount;
         int percentage;
         String oldestBook;
         String getBooksThisLength;
 
-        // Create a list of novels to be used in the bookstore
-        List<Literature> novelList = new ArrayList<>();
+        final BookStore<Literature> store;
+        final BookStore myBookStore;
 
-        // Create the bookstore object with the list of novels
-        BookStore<Literature> store = new BookStore<>("Pet Crossing", novelList);
+        myBookStore = new BookStore("Animal Crossing");
+        store = new BookStore<>("Pet Crossing");
+
         store.addItem(new Novel("War and Peace", "John Heleon", 1968));
         store.addItem(new ComicBook("Spider-Man", 1910));
         store.addItem(new Magazine("National Geographic", 1980));
-        store.printItems(); // Should print titles from different item types
+        store.printItems();
 
-
-        // Create the bookstore object with the list of novels
-        BookStore myBookStore = new BookStore("Animal Crossing", novelList);
-
-        // Call the method to check if there's a book written in 1980
         bookWrittenBetween = myBookStore.isThereABookWrittenBetween(1980);
         System.out.println("Does this book store have a book written in 1980: " + (bookWrittenBetween ? "Yes" : "No"));
 
-        // Call the method to count how many books contain the word "white"
         wordCount = myBookStore.howManyBooksContain("white");
         System.out.println("The number of books that contain the word \"white\": " + wordCount);
 
-        // Call the method to find the percentage of books written between 1510 and 1980
         percentage = myBookStore.whichPercentWrittenBetween(1510, 1980);
         System.out.println("Percentage of books written between 1510 and 1980: " + percentage + "%");
 
-        // Call the method to get the oldest book in the bookstore
         oldestBook = myBookStore.getOldestBook();
         System.out.println("The oldest book in the store: " + oldestBook);
 
-        // Call the method to get books with titles of a specific length
         getBooksThisLength = myBookStore.getBooksThisLength(8);
         System.out.println("The books that have a length of 8 characters: " + getBooksThisLength);
 
-        // New Tests for the latest methods implemented
-
-        // Test the printAllTitles method to ensure it prints all titles in uppercase
         System.out.println("\nAll titles in UPPERCASE:");
         myBookStore.printAllTitles();
 
-        // Test the printBookTitle method with a title substring
         System.out.println("\nBooks with 'war' in the title:");
         myBookStore.printBookTitle("war");
 
-        // Test the printTitlesInAlphaOrder method to print all titles in alphabetical order
         System.out.println("\nBooks in alphabetical order:");
         myBookStore.printTitlesInAlphaOrder();
 
-        // Test the printGroupByDecade method with a specific decade
         System.out.println("\nBooks from the 1940s:");
         myBookStore.printGroupByDecade(1940);
 
-        // Test the getLongest method to find and print the longest title
         System.out.println("\nThe longest title in the bookstore:");
         myBookStore.getLongest();
     }
