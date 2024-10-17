@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  * @author Gem Baojimin Sha
  * @version 1.0
  */
-public class BookStore <T extends Literature>
+public class BookStore<T extends Literature>
 {
     private static final int  MIN_YEAR = 0;
     private static final int  MAX_YEAR = 9999;
@@ -43,7 +43,8 @@ public class BookStore <T extends Literature>
      *
      * @param item The item to be added to the bookstore. It must be of type T, which extends Literature.
      */
-    public void addItem(final T item) {
+    public void addItem(final T item)
+    {
         items.add(item);
     }
 
@@ -51,8 +52,10 @@ public class BookStore <T extends Literature>
      * Prints the titles of all items stored in the bookstore's list.
      * Each item must implement a getTitle() method, which is inherited from the Literature class.
      */
-    public void printItems() {
-        for (final T item : items) {
+    public void printItems()
+    {
+        for(final T item : items)
+        {
             System.out.println(item.getTitle());
         }
     }
@@ -67,7 +70,7 @@ public class BookStore <T extends Literature>
               final List<T> novels)
     {
         this.bookStoreName = bookStoreName;
-        this.novelList     = new ArrayList<>();
+        this.novelList = new ArrayList<>();
 
         novelList.add(new Novel("The Adventures of Augie March", "Saul Bellow", 1953));
         novelList.add(new Novel("All the King's Men", "Robert Penn Warren", 1946));
@@ -172,6 +175,106 @@ public class BookStore <T extends Literature>
     }
 
     /**
+     * Adds all Novel objects from the items collection to the provided novelCollection.
+     *
+     * @param novelCollection A List that can contain Novel objects or their superclasses.
+     *                        This list will be modified to include all Novel objects from the items collection.
+     */
+    public void addNovelsToCollection(List<? super Novel> novelCollection)
+    {
+        if(items != null && novelCollection != null)
+        {
+            for(T item : items)
+            {
+                if(item instanceof Novel)
+                {
+                    novelCollection.add((Novel) item);
+                }
+            }
+        }
+    }
+
+    /**
+     * A static nested class that provides information about a bookstore.
+     */
+    static class BookStoreInfo
+    {
+        /**
+         * Displays information about a bookstore, including its name and item count.
+         *
+         * @param storeName The name of the bookstore.
+         * @param itemCount The number of items in the bookstore's inventory.
+         */
+        public void displayInfo(String storeName, int itemCount)
+        {
+            System.out.println("BookStore: " + storeName + ", Items: " + itemCount);
+        }
+    }
+
+    /**
+     * An inner class that provides statistical analysis for novels in the collection.
+     */
+    class NovelStatistics
+    {
+        /**
+         * Calculates the average length of titles for all items in the collection.
+         *
+         * @return The average length of titles as a double.
+         */
+        public double averageTitleLength()
+        {
+            int totalLength = 0;
+            for(T item : items)
+            {
+                totalLength += item.getTitle().length();
+            }
+            return (double) totalLength / items.size();
+        }
+
+        /**
+         * Determines the most common publication year among all items in the collection.
+         *
+         * @return The year that appears most frequently as the publication year.
+         */
+        public int mostCommonPublicationYear()
+        {
+            int mostCommonYear;
+            int maxCount;
+            mostCommonYear = 0;
+            maxCount = 0;
+            List<Integer> years = new ArrayList<>();
+
+            for(T item : items)
+            {
+                int year;
+                year = item.getYearPublished();
+                years.add(year);
+            }
+
+            for(int year : years)
+            {
+                int count;
+                count = 0;
+
+                for(int otherYear : years)
+                {
+                    if(year == otherYear)
+                    {
+                        count++;
+                    }
+                }
+                if(count > maxCount)
+                {
+                    maxCount = count;
+                    mostCommonYear = year;
+                }
+            }
+
+            return mostCommonYear;
+        }
+    }
+
+    /**
      * Gets the name of the bookstore.
      *
      * @return The name of the bookstore.
@@ -211,16 +314,9 @@ public class BookStore <T extends Literature>
     public void printBookTitle(final String title)
     {
 
-//        for(Novel novel : novelList)
-//        {
-//            if(novel.getTitle().toLowerCase().contains(title.toLowerCase()))
-//            {
-//                System.out.println(novel.getTitle());
-//            }
-//        }
-
-        items.forEach(item -> {
-            if (item.getTitle().contains(title))
+        items.forEach(item ->
+        {
+            if(item.getTitle().contains(title))
             {
                 final Consumer<String> stringConsumer;
                 stringConsumer = System.out::println;
@@ -307,12 +403,12 @@ public class BookStore <T extends Literature>
 
         for(Novel novel : novelList)
         {
-            if (novel != null)
+            if(novel != null)
             {
                 int selectedBook;
                 selectedBook = novel.getYearPublished();
 
-                if (selectedBook == year)
+                if(selectedBook == year)
                 {
                     return true;
                 }
@@ -571,8 +667,8 @@ public class BookStore <T extends Literature>
         // Create the bookstore object with the list of novels
         BookStore<Literature> store = new BookStore<>("Pet Crossing", novelList);
         store.addItem(new Novel("War and Peace", "John Heleon", 1968));
-        store.addItem(new ComicBook("Spider-Man"));
-        store.addItem(new Magazine("National Geographic"));
+        store.addItem(new ComicBook("Spider-Man", 1910));
+        store.addItem(new Magazine("National Geographic", 1980));
         store.printItems(); // Should print titles from different item types
 
 
